@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	{% if detect == 0 %}
+		<form id="login-form" action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
+			Voila file uploaded
+			<img src=" {{url_for('static', filename = 'temp.jpg')}}" width="500" height="600">
+			<input type="submit" value="Detect!" id="upload-button">
+		</form>
+	{% else %}
+		<h1> {{ detect }} </h1>
+		<!-- maybe display the image output here with recognized objects -->
+		<form id="crawler1" action="{{ url_for('amazon') }}" method="POST" enctype="multipart/form-data">
+			<input type="submit" value="Amazon" id="search-amazon" />
+		</form>
+		<form id="crawler2" action="{{ url_for('walmart') }}" method="POST" enctype="multipart/form-data">
+			<input type="submit" value="Walmart" id="search-amazon" />
+		</form>
+	{% endif %}
+
+</body>
+</html>
