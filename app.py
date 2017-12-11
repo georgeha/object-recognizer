@@ -11,6 +11,7 @@ from django.utils.http import urlquote
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+
 __author__ = 'ibininja'
 
 app = Flask(__name__)
@@ -27,6 +28,8 @@ def amazon():
     static_search_amazon = 'https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords='
     driver.get(static_search_amazon+urlquote(search_string).encode('utf8'))
     return "searching amazon"
+
+
 @app.route("/walmart", methods=["POST"])
 def walmart():
     driver = webdriver.Chrome('C:\Users\Dev\Downloads\chromedriver_win32\chromedriver.exe')
@@ -41,13 +44,17 @@ def index():
     print "in index call..calling upload"
     return render_template("upload.html")
 
+
 def object_recognizer():
     f = open("temp.txt","w+")
     f.write("Line 1 \n")
     f.write("Line 2 \n")
     f.close();
     print "called object rec"
-    delete_line()
+    #delete_line()
+    return   'recon'
+
+
 def delete_line():
     f = open("temp.txt","r+")
     lines = f.readlines()
@@ -64,7 +71,7 @@ def delete_line():
 @app.route("/login", methods=["POST"])
 def login():
     #call object recognzer here
-    #string = object_recognizer()
+    string = object_recognizer()
     string = "output of object recognizer goes here"
     #set search string valu
     return render_template('login.html',detect=string)
@@ -96,4 +103,4 @@ def upload():
 
 
 if __name__ == "__main__":
-    app.run(port=4555, debug=True)
+    app.run(port=4555, debug=True, host='0.0.0.0')
