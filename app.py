@@ -12,11 +12,15 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
-__author__ = 'ibininja'
 
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+PROJECT_DIR = '/home/georgeha/project/'
+DARKNET_DIR = '/home/georgeha/project/darknet'
+POET_DIR = '/home/georgeha/project/darknet/tensorflow-for-poets-2'
+image_URL = '/home/georgeha/project/object-recognizer/static/temp.jpg'
 
 #change location here, download chrome driver
 search_string = "books"
@@ -46,14 +50,20 @@ def index():
 
 
 def object_recognizer():
-    f = open("temp.txt","w+")
-    f.write("Line 1 \n")
-    f.write("Line 2 \n")
-    f.close();
     print "called object rec"
+    os.chdir(DARKNET_DIR)
+    os.system('./darknet detect cfg/yolo.cfg yolo.weights ' +  image_URL)
+    #os.chdir(DARKNET_DIR)
+    #os.system('python crop_classify.py')
     #delete_line()
     return   'recon'
 
+def object_cropper():
+
+    os.chdir(DARKNET_DIR)
+    os.system('./crop_classify.py')
+
+    return 'croped'
 
 def delete_line():
     f = open("temp.txt","r+")
@@ -72,8 +82,12 @@ def delete_line():
 def login():
     #call object recognzer here
     string = object_recognizer()
-    string = "output of object recognizer goes here"
+    #string = "output of object recognizer goes here"
     #set search string valu
+    cropp = object_cropper()
+    f = open(DARKNET_DIR + 'object.txt','r')
+    string = "Recognized Object is: " + f.readlines()
+    f.close()
     return render_template('login.html',detect=string)
 
 @app.route("/upload", methods=["POST"])
