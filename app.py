@@ -24,24 +24,28 @@ image_URL = '/home/georgeha/project/object-recognizer/static/temp.jpg'
 
 #change location here, download chrome driver
 search_string = "books"
+
 @app.route("/amazon", methods=["POST"])
 def amazon():
-    driver = webdriver.Chrome('C:\Users\Dev\Downloads\chromedriver_win32\chromedriver.exe')
+    #driver = webdriver.Chrome('C:\Users\Dev\Downloads\chromedriver_win32\chromedriver.exe')
     #change location here, download selenium chrome driver
     #driver.maximize_window() 
     static_search_amazon = 'https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords='
-    driver.get(static_search_amazon+urlquote(search_string).encode('utf8'))
-    return "searching amazon"
+    #driver.get(static_search_amazon+urlquote(search_string).encode('utf8'))
+
+    return redirect(static_search_amazon + search_string)
+    #return "searching amazon"
 
 
 @app.route("/walmart", methods=["POST"])
 def walmart():
-    driver = webdriver.Chrome('C:\Users\Dev\Downloads\chromedriver_win32\chromedriver.exe')
+    #driver = webdriver.Chrome('C:\Users\Dev\Downloads\chromedriver_win32\chromedriver.exe')
     #driver.maximize_window() 
     static_search_walmart1 = 'https://www.walmart.com/search/?query='
     static_search_walmart2 = '&cat_id=0'
-    driver.get(static_search_walmart1+urlquote(search_string).encode('utf8')+static_search_walmart2)
-    return "searching walmart"
+    #driver.get(static_search_walmart1+urlquote(search_string).encode('utf8')+static_search_walmart2)
+    
+    return redirect(static_search_walmart1 + search_string + static_search_walmart2)
 
 @app.route("/")
 def index():
@@ -91,10 +95,14 @@ def login():
     lines = fc.readlines()
     brand = lines[2].split(' ')[0]
     brand = str(brand)
+    if brand.strip()=='macbook':
+        brand = "Apple"
 
     f = open(DARKNET_DIR + '/object.txt','r')
     a = f.readlines()
     string = "Recognized Object is: " + str(a[0]) + " Brand:  " + brand
+    global search_string
+    search_string = brand + '  ' + str(a[0])
     f.close()
     return render_template('login.html',detect=string)
 
