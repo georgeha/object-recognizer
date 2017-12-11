@@ -84,9 +84,17 @@ def login():
     string = object_recognizer()
     #string = "output of object recognizer goes here"
     #set search string valu
-    cropp = object_cropper()
-    f = open(DARKNET_DIR + 'object.txt','r')
-    string = "Recognized Object is: " + f.readlines()
+
+    crop = object_cropper()
+
+    fc = open(DARKNET_DIR + '/classify.txt','r')
+    lines = fc.readlines()
+    brand = lines[2].split(' ')[0]
+    brand = str(brand)
+
+    f = open(DARKNET_DIR + '/object.txt','r')
+    a = f.readlines()
+    string = "Recognized Object is: " + str(a[0]) + " Brand:  " + brand
     f.close()
     return render_template('login.html',detect=string)
 
